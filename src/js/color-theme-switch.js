@@ -4,44 +4,52 @@ const Theme = {
 };
 
 // Селектор переключателя тем
-const checkBoxTheme = document.querySelector('#theme-switch-toggle')
+const checkboxTheme = document.querySelector('#theme-switch-toggle')
 
-// Переменные для установки темы body
-const addLightTheme = document.body.classList.add(Theme.LIGHT);
-const addDarkTheme = document.body.classList.add(Theme.DARK);
 
-// Переменные для установки значения localStorage
-const setStorageThemeLight = localStorage.setItem('currentTheme', Theme.LIGHT);
-const setStorageThemeDark = localStorage.setItem('currentTheme', Theme.DARK);
+// Функции для установки темы body
+const addClass = (color) => document.body.classList.add(color);
+const removeClass = (color) => document.body.classList.remove(color);
+
+
+// Функции для установки значения localStorage
+const setStorageThemeLight = () => localStorage.setItem('currentTheme', Theme.LIGHT);
+const setStorageThemeDark = () => localStorage.setItem('currentTheme', Theme.DARK);
 
 // Проверка localStorage на наличие светлой/темной темы
 storageThemeRequire();
 
 // Слушатель на чекбокс
-checkBoxTheme.addEventListener('change', changeThemeColor)
+checkboxTheme.addEventListener('change', changeThemeColor)
 
 // Функция проверки localStorage на отсутствие/присутствие темы
 function storageThemeRequire() {
   if (!localStorage.getItem('currentTheme')) {
-    setStorageThemeLight;
-    addLightTheme;
+    setStorageThemeLight();
+    removeClass(Theme.DARK)
+    addClass(Theme.LIGHT)
   } else if (localStorage.getItem('currentTheme') === Theme.DARK) {
-    addDarkTheme;
-      checkBoxTheme.setAttribute('checked', 'checked');
+    removeClass(Theme.LIGHT)
+    addClass(Theme.DARK)
+    checkboxTheme.setAttribute('checked', 'checked');
   } else {
-    addLightTheme;
+    removeClass(Theme.DARK)
+    addClass(Theme.LIGHT)
   }
 }
 
 // Callback для чекбокса
 function changeThemeColor() {
-  document.body.classList.toggle(Theme.DARK);
-  if (checkBoxTheme.hasAttribute('checked')) {
-    checkBoxTheme.removeAttribute('checked');
-    setStorageThemeLight;
+  if (checkboxTheme.hasAttribute('checked')) {
+    removeClass(Theme.DARK)
+    addClass(Theme.LIGHT)
+    setStorageThemeLight();
+    checkboxTheme.removeAttribute('checked');
   } else {
-    checkBoxTheme.setAttribute('checked', 'checked');
-    setStorageThemeDark;
+    removeClass(Theme.LIGHT)
+    addClass(Theme.DARK)
+    setStorageThemeDark();
+    checkboxTheme.setAttribute('checked', 'checked');
   }
 }
 
